@@ -1,6 +1,6 @@
-<Activity mc:Ignorable="sap sap2010" x:Class="Main" mva:VisualBasic.Settings="{x:Null}" sap:VirtualizedContainerService.HintSize="1384,5539" sap2010:WorkflowViewState.IdRef="ActivityBuilder_1" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+<Activity mc:Ignorable="sap sap2010" x:Class="Main" mva:VisualBasic.Settings="{x:Null}" sap:VirtualizedContainerService.HintSize="1384,6286" sap2010:WorkflowViewState.IdRef="ActivityBuilder_1" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <TextExpression.NamespacesForImplementation>
-    <scg:List x:TypeArguments="x:String" Capacity="34">
+    <scg:List x:TypeArguments="x:String" Capacity="36">
       <x:String>System.Activities</x:String>
       <x:String>System.Activities.Statements</x:String>
       <x:String>System.Activities.Expressions</x:String>
@@ -35,10 +35,12 @@
       <x:String>System.Reflection</x:String>
       <x:String>System.Runtime.InteropServices</x:String>
       <x:String>UiPath.DataTableUtilities</x:String>
+      <x:String>UiPath.Database</x:String>
+      <x:String>UiPath.Database.Activities</x:String>
     </scg:List>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
-    <scg:List x:TypeArguments="AssemblyReference" Capacity="31">
+    <scg:List x:TypeArguments="AssemblyReference" Capacity="32">
       <AssemblyReference>System.Activities</AssemblyReference>
       <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
@@ -69,7 +71,8 @@
       <AssemblyReference>UiPath.Mail</AssemblyReference>
       <AssemblyReference>UiPath.UIAutomationCore</AssemblyReference>
       <AssemblyReference>UiPath.OCR.Activities.Design</AssemblyReference>
-      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
+      <AssemblyReference>UiPath.Database</AssemblyReference>
+      <AssemblyReference>UiPath.Database.Activities</AssemblyReference>
     </scg:List>
   </TextExpression.ReferencesForImplementation>
   <sap:WorkflowViewStateService.ViewState>
@@ -77,34 +80,42 @@
       <x:Boolean x:Key="ShouldExpandAll">False</x:Boolean>
     </scg:Dictionary>
   </sap:WorkflowViewStateService.ViewState>
-  <Sequence sap:VirtualizedContainerService.HintSize="1394,5474" sap2010:WorkflowViewState.IdRef="Sequence_5">
+  <Sequence sap:VirtualizedContainerService.HintSize="1394,6221" sap2010:WorkflowViewState.IdRef="Sequence_5">
     <Sequence.Variables>
       <Variable x:TypeArguments="sd:DataTable" Name="ibge" />
+      <Variable x:TypeArguments="x:String" Name="var_str_cidade_ibge" />
+      <Variable x:TypeArguments="x:String" Name="var_str_cep" />
+      <Variable x:TypeArguments="x:String" Name="var_str_tp_codigo" />
+      <Variable x:TypeArguments="sd:DataTable" Name="Tabela" />
+      <Variable x:TypeArguments="x:Int32" Name="var_int_codigos" />
+      <Variable x:TypeArguments="x:String" Name="TB_Insert" />
+      <Variable x:TypeArguments="ui:DatabaseConnection" Name="Conexao" />
+      <Variable x:TypeArguments="sd:DataTable" Name="Tb_saida" />
     </Sequence.Variables>
     <sap:WorkflowViewStateService.ViewState>
       <scg:Dictionary x:TypeArguments="x:String, x:Object">
         <x:Boolean x:Key="IsExpanded">True</x:Boolean>
       </scg:Dictionary>
     </sap:WorkflowViewStateService.ViewState>
-    <ui:OpenBrowser CommunicationMethod="{x:Null}" Hidden="{x:Null}" NewSession="{x:Null}" Private="{x:Null}" UiBrowser="{x:Null}" BrowserType="Edge" DisplayName="Open Browser" sap:VirtualizedContainerService.HintSize="1352,5382" sap2010:WorkflowViewState.IdRef="OpenBrowser_1" Url="https://buscacepinter.correios.com.br/app/endereco/index.php?t">
+    <ui:OpenBrowser CommunicationMethod="{x:Null}" Hidden="{x:Null}" NewSession="{x:Null}" Private="{x:Null}" UiBrowser="{x:Null}" BrowserType="Edge" DisplayName="Abrir Navegador" sap:VirtualizedContainerService.HintSize="1352,6129" sap2010:WorkflowViewState.IdRef="OpenBrowser_1" Url="https://buscacepinter.correios.com.br/app/endereco/index.php?t">
       <ui:OpenBrowser.Body>
         <ActivityAction x:TypeArguments="x:Object">
           <ActivityAction.Argument>
             <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
           </ActivityAction.Argument>
-          <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="1318,5281" sap2010:WorkflowViewState.IdRef="Sequence_4">
+          <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="1318,6027" sap2010:WorkflowViewState.IdRef="Sequence_4">
             <sap:WorkflowViewStateService.ViewState>
               <scg:Dictionary x:TypeArguments="x:String, x:Object">
                 <x:Boolean x:Key="IsExpanded">True</x:Boolean>
               </scg:Dictionary>
             </sap:WorkflowViewStateService.ViewState>
-            <Sequence DisplayName="Básico" sap:VirtualizedContainerService.HintSize="1276,5189" sap2010:WorkflowViewState.IdRef="Sequence_3">
+            <Sequence DisplayName="Procura " sap:VirtualizedContainerService.HintSize="1276,5935" sap2010:WorkflowViewState.IdRef="Sequence_3">
               <sap:WorkflowViewStateService.ViewState>
                 <scg:Dictionary x:TypeArguments="x:String, x:Object">
                   <x:Boolean x:Key="IsExpanded">True</x:Boolean>
                 </scg:Dictionary>
               </sap:WorkflowViewStateService.ViewState>
-              <ui:Click AlterIfDisabled="{x:Null}" CursorMotionType="{x:Null}" DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click 'INPUT  endereco'" sap:VirtualizedContainerService.HintSize="1234,106" sap2010:WorkflowViewState.IdRef="Click_1" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+              <ui:Click AlterIfDisabled="{x:Null}" CursorMotionType="{x:Null}" DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click Cep" sap:VirtualizedContainerService.HintSize="1234,106" sap2010:WorkflowViewState.IdRef="Click_1" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
                 <ui:Click.CursorPosition>
                   <ui:CursorPosition OffsetX="122" OffsetY="24" Position="TopLeft" />
                 </ui:Click.CursorPosition>
@@ -116,7 +127,7 @@
                   </ui:Target>
                 </ui:Click.Target>
               </ui:Click>
-              <ui:TypeInto AlterIfDisabled="{x:Null}" ClickBeforeTyping="{x:Null}" DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" DisplayName="Type Into 'INPUT  endereco'" EmptyField="False" sap:VirtualizedContainerService.HintSize="1234,134" sap2010:WorkflowViewState.IdRef="TypeInto_1" SendWindowMessages="False" SimulateType="True" Text="mg">
+              <ui:TypeInto AlterIfDisabled="{x:Null}" ClickBeforeTyping="{x:Null}" DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" DisplayName="Inserir Estado " EmptyField="False" sap:VirtualizedContainerService.HintSize="1234,134" sap2010:WorkflowViewState.IdRef="TypeInto_1" SendWindowMessages="False" SimulateType="True" Text="mg">
                 <ui:TypeInto.Target>
                   <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="df1dbd10-d1b1-45e2-be43-56de1211e938" InformativeScreenshot="dc8412b059b963aaebf7a5ff648fc755" Selector="&lt;html app='msedge.exe' title='Busca CEP' /&gt;&lt;webctrl tag='INPUT' type='text' /&gt;" WaitForReady="COMPLETE">
                     <ui:Target.TimeoutMS>
@@ -125,7 +136,7 @@
                   </ui:Target>
                 </ui:TypeInto.Target>
               </ui:TypeInto>
-              <ui:Click AlterIfDisabled="{x:Null}" CursorMotionType="{x:Null}" DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click 'BUTTON  btn_pesquisar'" sap:VirtualizedContainerService.HintSize="1234,106" sap2010:WorkflowViewState.IdRef="Click_2" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+              <ui:Click AlterIfDisabled="{x:Null}" CursorMotionType="{x:Null}" DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="busca click" sap:VirtualizedContainerService.HintSize="1234,106" sap2010:WorkflowViewState.IdRef="Click_2" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
                 <ui:Click.CursorPosition>
                   <ui:CursorPosition OffsetX="42" OffsetY="15" Position="TopLeft" />
                 </ui:Click.CursorPosition>
@@ -137,22 +148,22 @@
                   </ui:Target>
                 </ui:Click.Target>
               </ui:Click>
-              <Sequence DisplayName="Extração de Dados" sap:VirtualizedContainerService.HintSize="1234,4631" sap2010:WorkflowViewState.IdRef="Sequence_2">
+              <Sequence DisplayName="Extração de Dados" sap:VirtualizedContainerService.HintSize="1234,5377" sap2010:WorkflowViewState.IdRef="Sequence_2">
                 <Sequence.Variables>
                   <Variable x:TypeArguments="sd:DataTable" Name="cidades" />
-                  <Variable x:TypeArguments="x:String" Name="pop_2020" />
-                  <Variable x:TypeArguments="x:String" Name="pop_2010" />
-                  <Variable x:TypeArguments="x:String" Name="ds_demografica" />
-                  <Variable x:TypeArguments="x:String" Name="cg_municipio" />
-                  <Variable x:TypeArguments="x:String" Name="gentilico" />
-                  <Variable x:TypeArguments="x:String" Name="prefeito" />
+                  <Variable x:TypeArguments="x:String" Name="var_str_pop_2020" />
+                  <Variable x:TypeArguments="x:String" Name="var_str_pop_2010" />
+                  <Variable x:TypeArguments="x:String" Name="var_str_ds_demografica" />
+                  <Variable x:TypeArguments="x:String" Name="var_str_cg_municipio" />
+                  <Variable x:TypeArguments="x:String" Name="var_str_gentilico" />
+                  <Variable x:TypeArguments="x:String" Name="var_str_prefeito" />
                 </Sequence.Variables>
                 <sap:WorkflowViewStateService.ViewState>
                   <scg:Dictionary x:TypeArguments="x:String, x:Object">
                     <x:Boolean x:Key="IsExpanded">True</x:Boolean>
                   </scg:Dictionary>
                 </sap:WorkflowViewStateService.ViewState>
-                <ui:BrowserScope Browser="{x:Null}" SearchScope="{x:Null}" TimeoutMS="{x:Null}" UiBrowser="{x:Null}" BrowserType="Edge" DisplayName="Attach Browser 'BuscaCEP Page'" sap:VirtualizedContainerService.HintSize="1192,344" sap2010:WorkflowViewState.IdRef="BrowserScope_2" InformativeScreenshot="8e65c5aad2dd19146d18030273d2f128" Selector="&lt;html app='msedge.exe' title='Busca CEP' /&gt;">
+                <ui:BrowserScope Browser="{x:Null}" SearchScope="{x:Null}" TimeoutMS="{x:Null}" UiBrowser="{x:Null}" BrowserType="Edge" DisplayName="Buscar dados Correios" sap:VirtualizedContainerService.HintSize="1192,344" sap2010:WorkflowViewState.IdRef="BrowserScope_2" InformativeScreenshot="8e65c5aad2dd19146d18030273d2f128" Selector="&lt;html app='msedge.exe' title='Busca CEP' /&gt;">
                   <ui:BrowserScope.Body>
                     <ActivityAction x:TypeArguments="x:Object">
                       <ActivityAction.Argument>
@@ -164,7 +175,7 @@
                             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
                           </scg:Dictionary>
                         </sap:WorkflowViewStateService.ViewState>
-                        <ui:ExtractData DelayBetweenPagesMS="{x:Null}" ContinueOnError="True" DataTable="[Cidades]" DisplayName="Extract Structured Data 'TBODY'" ExtractMetadata="&lt;extract&gt;&lt;row exact='1'&gt;&lt;webctrl tag='tr' /&gt;&lt;/row&gt;&lt;column exact='1' name='Cidade' attr='text'&gt;&lt;webctrl tag='tr' /&gt;&lt;webctrl tag='td' idx='3' /&gt;&lt;/column&gt;&lt;column exact='1' name='CEP' attr='text'&gt;&lt;webctrl tag='tr' /&gt;&lt;webctrl tag='td' idx='4' /&gt;&lt;/column&gt;&lt;/extract&gt;" sap:VirtualizedContainerService.HintSize="334,106" sap2010:WorkflowViewState.IdRef="ExtractData_2" MaxNumberOfResults="100" NextLinkSelector="&lt;webctrl aaname='Próximo' parentid='navegacao-resultado' tag='A' /&gt;" SimulateClick="True">
+                        <ui:ExtractData DelayBetweenPagesMS="{x:Null}" ContinueOnError="True" DataTable="[Cidades]" DisplayName="Extrair dados correio " ExtractMetadata="&lt;extract&gt;&lt;row exact='1'&gt;&lt;webctrl tag='tr' /&gt;&lt;/row&gt;&lt;column exact='1' name='Cidade' attr='text'&gt;&lt;webctrl tag='tr' /&gt;&lt;webctrl tag='td' idx='3' /&gt;&lt;/column&gt;&lt;column exact='1' name='CEP' attr='text'&gt;&lt;webctrl tag='tr' /&gt;&lt;webctrl tag='td' idx='4' /&gt;&lt;/column&gt;&lt;/extract&gt;" sap:VirtualizedContainerService.HintSize="334,106" sap2010:WorkflowViewState.IdRef="ExtractData_2" MaxNumberOfResults="100" NextLinkSelector="&lt;webctrl aaname='Próximo' parentid='navegacao-resultado' tag='A' /&gt;" SimulateClick="True">
                           <ui:ExtractData.Target>
                             <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="df97595f-5f45-40c0-9d73-62a7ef115f8c" InformativeScreenshot="230f2833f6963c1bc5a2be68fa64c3da" Selector="&lt;webctrl tag='TBODY' /&gt;" WaitForReady="COMPLETE">
                               <ui:Target.TimeoutMS>
@@ -177,7 +188,7 @@
                     </ActivityAction>
                   </ui:BrowserScope.Body>
                 </ui:BrowserScope>
-                <ui:FilterDataTable DataTable="[cidades]" DisplayName="Filter Data Table" FilterRowsMode="Keep" sap:VirtualizedContainerService.HintSize="1192,160" sap2010:WorkflowViewState.IdRef="FilterDataTable_1" OutputDataTable="[cidades]" SelectColumnsMode="Keep">
+                <ui:FilterDataTable sap2010:Annotation.AnnotationText="verifica se cidade está no estado de minas gerais " DataTable="[cidades]" DisplayName="filtro MG" FilterRowsMode="Keep" sap:VirtualizedContainerService.HintSize="1192,193" sap2010:WorkflowViewState.IdRef="FilterDataTable_1" OutputDataTable="[cidades]" SelectColumnsMode="Keep">
                   <ui:FilterDataTable.Filters>
                     <scg:List x:TypeArguments="ui:FilterOperationArgument" Capacity="4">
                       <ui:FilterOperationArgument BooleanOperator="And" Operator="CONTAINS">
@@ -195,61 +206,66 @@
                       <x:Null />
                     </scg:List>
                   </ui:FilterDataTable.SelectColumns>
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
                 </ui:FilterDataTable>
-                <ui:WriteRange AddHeaders="True" DataTable="[cidades]" DisplayName="Write Range" sap:VirtualizedContainerService.HintSize="1192,115" sap2010:WorkflowViewState.IdRef="WriteRange_1" SheetName="Sheet1" StartingCell="A1" WorkbookPath="cidades.xlsx" />
-                <ui:AppendCsvFile Encoding="{x:Null}" DataTable="[cidades]" Delimitator="Semicolon" DisplayName="Append to CSV" FilePath="cidades2.CSV" sap:VirtualizedContainerService.HintSize="1192,132" sap2010:WorkflowViewState.IdRef="AppendCsvFile_1" />
-                <ui:OpenBrowser CommunicationMethod="{x:Null}" Hidden="{x:Null}" NewSession="{x:Null}" Private="{x:Null}" UiBrowser="{x:Null}" BrowserType="Edge" DisplayName="Open Browser" sap:VirtualizedContainerService.HintSize="1192,3628" sap2010:WorkflowViewState.IdRef="OpenBrowser_2" Url="https://cidades.ibge.gov.br/">
+                <ui:WriteRange AddHeaders="True" DataTable="[cidades]" DisplayName="Planlha Cidades " sap:VirtualizedContainerService.HintSize="1192,115" sap2010:WorkflowViewState.IdRef="WriteRange_1" SheetName="Sheet1" StartingCell="A1" WorkbookPath="cidades.xlsx" />
+                <ui:AppendCsvFile Encoding="{x:Null}" DataTable="[cidades]" Delimitator="Semicolon" DisplayName="Planilhas cidades em CSV" FilePath="cidades2.CSV" sap:VirtualizedContainerService.HintSize="1192,134" sap2010:WorkflowViewState.IdRef="AppendCsvFile_1" />
+                <ui:OpenBrowser CommunicationMethod="{x:Null}" Hidden="{x:Null}" NewSession="{x:Null}" Private="{x:Null}" UiBrowser="{x:Null}" BrowserType="Edge" DisplayName="Abrir procura iBGE" sap:VirtualizedContainerService.HintSize="1192,4339" sap2010:WorkflowViewState.IdRef="OpenBrowser_2" Url="https://cidades.ibge.gov.br/">
                   <ui:OpenBrowser.Body>
                     <ActivityAction x:TypeArguments="x:Object">
                       <ActivityAction.Argument>
                         <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
                       </ActivityAction.Argument>
-                      <Sequence DisplayName="Sequence" sap:VirtualizedContainerService.HintSize="1158,3527" sap2010:WorkflowViewState.IdRef="Sequence_7">
-                        <Sequence.Variables>
-                          <Variable x:TypeArguments="sd:DataTable" Name="Tabela" />
-                          <Variable x:TypeArguments="x:Int32" Name="Codigos" />
-                        </Sequence.Variables>
+                      <Sequence DisplayName="Sequence" sap:VirtualizedContainerService.HintSize="1158,4237" sap2010:WorkflowViewState.IdRef="Sequence_7">
                         <sap:WorkflowViewStateService.ViewState>
                           <scg:Dictionary x:TypeArguments="x:String, x:Object">
                             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
                           </scg:Dictionary>
                         </sap:WorkflowViewStateService.ViewState>
-                        <ui:ReadRange AddHeaders="True" DataTable="[IBGE]" DisplayName="Read Range" sap:VirtualizedContainerService.HintSize="1116,87" sap2010:WorkflowViewState.IdRef="ReadRange_2" Range="A1" SheetName="Sheet1" WorkbookPath="cidades.xlsx" />
-                        <ui:BuildDataTable DataTable="[Tabela]" DisplayName="Build Data Table" sap:VirtualizedContainerService.HintSize="1116,59" sap2010:WorkflowViewState.IdRef="BuildDataTable_1" TableInfo="&lt;NewDataSet&gt;&#xD;&#xA;  &lt;xs:schema id=&quot;NewDataSet&quot; xmlns=&quot;&quot; xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:msdata=&quot;urn:schemas-microsoft-com:xml-msdata&quot;&gt;&#xD;&#xA;    &lt;xs:element name=&quot;NewDataSet&quot; msdata:IsDataSet=&quot;true&quot; msdata:MainDataTable=&quot;TableName&quot; msdata:UseCurrentLocale=&quot;true&quot;&gt;&#xD;&#xA;      &lt;xs:complexType&gt;&#xD;&#xA;        &lt;xs:choice minOccurs=&quot;0&quot; maxOccurs=&quot;unbounded&quot;&gt;&#xD;&#xA;          &lt;xs:element name=&quot;TableName&quot;&gt;&#xD;&#xA;            &lt;xs:complexType&gt;&#xD;&#xA;              &lt;xs:sequence&gt;&#xD;&#xA;                &lt;xs:element name=&quot;Populaçao_x0020_estimada&quot; msdata:Caption=&quot;&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xD;&#xA;                &lt;xs:element name=&quot;população_x0020_no_x0020_ultimo_x0020_censo&quot; msdata:Caption=&quot;&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xD;&#xA;                &lt;xs:element name=&quot;densidade_x0020_demografica_x0020_&quot; msdata:Caption=&quot;&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xD;&#xA;                &lt;xs:element name=&quot;codigo_x0020_do_x0020_municipio_x0020_&quot; msdata:Caption=&quot;&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xD;&#xA;                &lt;xs:element name=&quot;gentilico_x0020_&quot; msdata:Caption=&quot;&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xD;&#xA;                &lt;xs:element name=&quot;prefeito_x0020_&quot; msdata:Caption=&quot;&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xD;&#xA;                &lt;xs:element name=&quot;Codigos&quot; msdata:Caption=&quot;&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xD;&#xA;              &lt;/xs:sequence&gt;&#xD;&#xA;            &lt;/xs:complexType&gt;&#xD;&#xA;          &lt;/xs:element&gt;&#xD;&#xA;        &lt;/xs:choice&gt;&#xD;&#xA;      &lt;/xs:complexType&gt;&#xD;&#xA;    &lt;/xs:element&gt;&#xD;&#xA;  &lt;/xs:schema&gt;&#xD;&#xA;&lt;/NewDataSet&gt;" />
-                        <ui:ForEachRow ColumnNames="{x:Null}" CurrentIndex="{x:Null}" DataTable="[ibge]" DisplayName="For Each Row in Data Table" sap:VirtualizedContainerService.HintSize="1116,3054" sap2010:WorkflowViewState.IdRef="ForEachRow_1">
+                        <ui:ReadRange AddHeaders="True" DataTable="[IBGE]" DisplayName="leitura planilha cidades" sap:VirtualizedContainerService.HintSize="1116,87" sap2010:WorkflowViewState.IdRef="ReadRange_2" Range="A1" SheetName="Sheet1" WorkbookPath="cidades.xlsx" />
+                        <ui:BuildDataTable DataTable="[Tabela]" DisplayName="criação colunas" sap:VirtualizedContainerService.HintSize="1116,59" sap2010:WorkflowViewState.IdRef="BuildDataTable_1" TableInfo="&lt;NewDataSet&gt;&#xD;&#xA;  &lt;xs:schema id=&quot;NewDataSet&quot; xmlns=&quot;&quot; xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:msdata=&quot;urn:schemas-microsoft-com:xml-msdata&quot;&gt;&#xD;&#xA;    &lt;xs:element name=&quot;NewDataSet&quot; msdata:IsDataSet=&quot;true&quot; msdata:MainDataTable=&quot;TableName&quot; msdata:UseCurrentLocale=&quot;true&quot;&gt;&#xD;&#xA;      &lt;xs:complexType&gt;&#xD;&#xA;        &lt;xs:choice minOccurs=&quot;0&quot; maxOccurs=&quot;unbounded&quot;&gt;&#xD;&#xA;          &lt;xs:element name=&quot;TableName&quot;&gt;&#xD;&#xA;            &lt;xs:complexType&gt;&#xD;&#xA;              &lt;xs:sequence&gt;&#xD;&#xA;                &lt;xs:element name=&quot;Populaçao_x0020_estimada&quot; msdata:Caption=&quot;&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xD;&#xA;                &lt;xs:element name=&quot;população_x0020_no_x0020_ultimo_x0020_censo&quot; msdata:Caption=&quot;&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xD;&#xA;                &lt;xs:element name=&quot;densidade_x0020_demografica_x0020_&quot; msdata:Caption=&quot;&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xD;&#xA;                &lt;xs:element name=&quot;codigo_x0020_do_x0020_municipio_x0020_&quot; msdata:Caption=&quot;&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xD;&#xA;                &lt;xs:element name=&quot;gentilico_x0020_&quot; msdata:Caption=&quot;&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xD;&#xA;                &lt;xs:element name=&quot;prefeito_x0020_&quot; msdata:Caption=&quot;&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xD;&#xA;                &lt;xs:element name=&quot;Codigos&quot; msdata:Caption=&quot;&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xD;&#xA;                &lt;xs:element name=&quot;CEP&quot; msdata:Caption=&quot;&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xD;&#xA;              &lt;/xs:sequence&gt;&#xD;&#xA;            &lt;/xs:complexType&gt;&#xD;&#xA;          &lt;/xs:element&gt;&#xD;&#xA;        &lt;/xs:choice&gt;&#xD;&#xA;      &lt;/xs:complexType&gt;&#xD;&#xA;    &lt;/xs:element&gt;&#xD;&#xA;  &lt;/xs:schema&gt;&#xD;&#xA;&lt;/NewDataSet&gt;" />
+                        <ui:ForEachRow ColumnNames="{x:Null}" CurrentIndex="{x:Null}" DataTable="[ibge]" DisplayName="Loop Procura Cidades" sap:VirtualizedContainerService.HintSize="1116,3164" sap2010:WorkflowViewState.IdRef="ForEachRow_1">
                           <ui:ForEachRow.Body>
                             <ActivityAction x:TypeArguments="sd:DataRow">
                               <ActivityAction.Argument>
                                 <DelegateInArgument x:TypeArguments="sd:DataRow" Name="Row" />
                               </ActivityAction.Argument>
-                              <Sequence sap:VirtualizedContainerService.HintSize="1082,2935" sap2010:WorkflowViewState.IdRef="Sequence_14">
+                              <Sequence sap:VirtualizedContainerService.HintSize="1082,3044" sap2010:WorkflowViewState.IdRef="Sequence_14">
                                 <sap:WorkflowViewStateService.ViewState>
                                   <scg:Dictionary x:TypeArguments="x:String, x:Object">
                                     <x:Boolean x:Key="IsExpanded">True</x:Boolean>
                                   </scg:Dictionary>
                                 </sap:WorkflowViewStateService.ViewState>
-                                <TryCatch DisplayName="Try Catch" sap:VirtualizedContainerService.HintSize="1040,2843" sap2010:WorkflowViewState.IdRef="TryCatch_1">
+                                <TryCatch DisplayName="Try Catch" sap:VirtualizedContainerService.HintSize="1040,2952" sap2010:WorkflowViewState.IdRef="TryCatch_1">
                                   <TryCatch.Try>
-                                    <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="1002,2616" sap2010:WorkflowViewState.IdRef="Sequence_9">
-                                      <Sequence.Variables>
-                                        <Variable x:TypeArguments="x:String" Name="cidade_ibge" />
-                                        <Variable x:TypeArguments="x:String" Name="tp_codigo" />
-                                      </Sequence.Variables>
+                                    <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="1002,2720" sap2010:WorkflowViewState.IdRef="Sequence_9">
                                       <sap:WorkflowViewStateService.ViewState>
                                         <scg:Dictionary x:TypeArguments="x:String, x:Object">
                                           <x:Boolean x:Key="IsExpanded">True</x:Boolean>
                                           <x:Boolean x:Key="IsPinned">False</x:Boolean>
                                         </scg:Dictionary>
                                       </sap:WorkflowViewStateService.ViewState>
-                                      <Assign sap:VirtualizedContainerService.HintSize="960,60" sap2010:WorkflowViewState.IdRef="Assign_1">
+                                      <Assign DisplayName="apaga palavra &quot;MG&quot; Planilha" sap:VirtualizedContainerService.HintSize="960,60" sap2010:WorkflowViewState.IdRef="Assign_1">
                                         <Assign.To>
-                                          <OutArgument x:TypeArguments="x:String">[cidade_ibge]</OutArgument>
+                                          <OutArgument x:TypeArguments="x:String">[var_str_cidade_ibge]</OutArgument>
                                         </Assign.To>
                                         <Assign.Value>
                                           <InArgument x:TypeArguments="x:String">[row.item("Cidade").ToString.Replace("/MG", "")]</InArgument>
                                         </Assign.Value>
                                       </Assign>
-                                      <ui:SetValue AlterIfDisabled="{x:Null}" ContinueOnError="{x:Null}" DelayAfter="{x:Null}" DelayBefore="{x:Null}" DisplayName="Set Text 'INPUT'" sap:VirtualizedContainerService.HintSize="960,134" sap2010:WorkflowViewState.IdRef="SetValue_2" Text="[cidade_ibge]">
+                                      <Assign sap:VirtualizedContainerService.HintSize="960,60" sap2010:WorkflowViewState.IdRef="Assign_15">
+                                        <Assign.To>
+                                          <OutArgument x:TypeArguments="x:String">[var_str_cep]</OutArgument>
+                                        </Assign.To>
+                                        <Assign.Value>
+                                          <InArgument x:TypeArguments="x:String">[row.item("CEP").ToString]</InArgument>
+                                        </Assign.Value>
+                                      </Assign>
+                                      <ui:SetValue AlterIfDisabled="{x:Null}" ContinueOnError="{x:Null}" DelayAfter="{x:Null}" DelayBefore="{x:Null}" DisplayName="Insere Texto " sap:VirtualizedContainerService.HintSize="960,134" sap2010:WorkflowViewState.IdRef="SetValue_2" Text="[var_str_cidade_ibge]">
                                         <ui:SetValue.Target>
                                           <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="7810a884-c8d1-4160-9a0f-a6253f1f1fb2" InformativeScreenshot="38b681e2b6b521ec74d538ed9aed66fe" Selector="&lt;webctrl tag='INPUT' /&gt;">
                                             <ui:Target.TimeoutMS>
@@ -261,7 +277,7 @@
                                           </ui:Target>
                                         </ui:SetValue.Target>
                                       </ui:SetValue>
-                                      <ui:Click AlterIfDisabled="{x:Null}" CursorMotionType="{x:Null}" DelayBefore="{x:Null}" DelayMS="{x:Null}" SendWindowMessages="{x:Null}" SimulateClick="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click 'SPAN'" sap:VirtualizedContainerService.HintSize="960,106" sap2010:WorkflowViewState.IdRef="Click_9" KeyModifiers="None" MouseButton="BTN_LEFT">
+                                      <ui:Click AlterIfDisabled="{x:Null}" CursorMotionType="{x:Null}" DelayBefore="{x:Null}" DelayMS="{x:Null}" SendWindowMessages="{x:Null}" SimulateClick="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click Cidades" sap:VirtualizedContainerService.HintSize="960,106" sap2010:WorkflowViewState.IdRef="Click_9" KeyModifiers="None" MouseButton="BTN_LEFT">
                                         <ui:Click.CursorPosition>
                                           <ui:CursorPosition Position="Center">
                                             <ui:CursorPosition.OffsetX>
@@ -273,7 +289,7 @@
                                           </ui:CursorPosition>
                                         </ui:Click.CursorPosition>
                                         <ui:Click.Target>
-                                          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="f343c9d5-5145-448c-b0dd-5bec092b859e" InformativeScreenshot="ab2252ccb35cd041320461d89e5df2e6" Selector="[String.Format(&quot;&lt;webctrl aaname='{0}' tag='SPAN' /&gt;&quot;, cidade_ibge)]" TimeoutMS="5000">
+                                          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="f343c9d5-5145-448c-b0dd-5bec092b859e" InformativeScreenshot="ab2252ccb35cd041320461d89e5df2e6" Selector="[String.Format(&quot;&lt;webctrl aaname='{0}' tag='SPAN' /&gt;&quot;, var_str_cidade_ibge)]" TimeoutMS="1000">
                                             <ui:Target.WaitForReady>
                                               <InArgument x:TypeArguments="ui:WaitForReady" />
                                             </ui:Target.WaitForReady>
@@ -286,7 +302,7 @@
                                           </scg:Dictionary>
                                         </sap:WorkflowViewStateService.ViewState>
                                       </ui:Click>
-                                      <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get Text 'DIV'" sap:VirtualizedContainerService.HintSize="960,106" sap2010:WorkflowViewState.IdRef="GetValue_1">
+                                      <ui:GetValue ContinueOnError="{x:Null}" DisplayName="População Estimada [2020]" sap:VirtualizedContainerService.HintSize="960,106" sap2010:WorkflowViewState.IdRef="GetValue_1">
                                         <ui:GetValue.Target>
                                           <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="bf11606c-c46a-413f-9226-f237fa7e9aa0" InformativeScreenshot="19afe78fa8e4e95d73c0daa9b951a218" Selector="&lt;webctrl css-selector='body&amp;gt;app&amp;gt;shell&amp;gt;div&amp;gt;div&amp;gt;panorama-shell&amp;gt;div&amp;gt;section&amp;gt;panorama-resumo&amp;gt;div&amp;gt;table&amp;gt;tr&amp;gt;td&amp;gt;valor-indicador&amp;gt;div' parentid='dados' tag='DIV' /&gt;" TimeoutMS="5000">
                                             <ui:Target.WaitForReady>
@@ -295,26 +311,26 @@
                                           </ui:Target>
                                         </ui:GetValue.Target>
                                         <ui:GetValue.Value>
-                                          <OutArgument x:TypeArguments="x:String">[pop_2020]</OutArgument>
+                                          <OutArgument x:TypeArguments="x:String">[var_str_pop_2020]</OutArgument>
                                         </ui:GetValue.Value>
                                       </ui:GetValue>
                                       <Assign sap:VirtualizedContainerService.HintSize="960,60" sap2010:WorkflowViewState.IdRef="Assign_3">
                                         <Assign.To>
-                                          <OutArgument x:TypeArguments="x:String">[pop_2020]</OutArgument>
+                                          <OutArgument x:TypeArguments="x:String">[var_str_pop_2020]</OutArgument>
                                         </Assign.To>
                                         <Assign.Value>
-                                          <InArgument x:TypeArguments="x:String">[pop_2020.Replace("pessoas","").Replace(".","").Trim]</InArgument>
+                                          <InArgument x:TypeArguments="x:String">[var_str_pop_2020.Replace("pessoas","").Replace(".","").Trim]</InArgument>
                                         </Assign.Value>
                                       </Assign>
                                       <Assign sap:VirtualizedContainerService.HintSize="960,60" sap2010:WorkflowViewState.IdRef="Assign_9">
                                         <Assign.To>
-                                          <OutArgument x:TypeArguments="x:Int32">[Codigos]</OutArgument>
+                                          <OutArgument x:TypeArguments="x:Int32">[var_int_codigos]</OutArgument>
                                         </Assign.To>
                                         <Assign.Value>
-                                          <InArgument x:TypeArguments="x:Int32">[convert.ToInt32(pop_2020)]</InArgument>
+                                          <InArgument x:TypeArguments="x:Int32">[convert.ToInt32(var_str_pop_2020)]</InArgument>
                                         </Assign.Value>
                                       </Assign>
-                                      <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get Text 'DIV'" sap:VirtualizedContainerService.HintSize="960,106" sap2010:WorkflowViewState.IdRef="GetValue_2">
+                                      <ui:GetValue ContinueOnError="{x:Null}" DisplayName="População no último censo [2010]" sap:VirtualizedContainerService.HintSize="960,106" sap2010:WorkflowViewState.IdRef="GetValue_2">
                                         <ui:GetValue.Target>
                                           <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="c6cc1030-0771-4b02-b0b2-90b8f0b00613" InformativeScreenshot="b000258f75ef910b7e804863b983bb8a" Selector="&lt;webctrl css-selector='body&amp;gt;app&amp;gt;shell&amp;gt;div&amp;gt;div&amp;gt;panorama-shell&amp;gt;div&amp;gt;section&amp;gt;panorama-resumo&amp;gt;div&amp;gt;table&amp;gt;tr&amp;gt;td&amp;gt;valor-indicador&amp;gt;div' parentid='dados' tableRow='4' tag='DIV' /&gt;">
                                             <ui:Target.TimeoutMS>
@@ -326,18 +342,18 @@
                                           </ui:Target>
                                         </ui:GetValue.Target>
                                         <ui:GetValue.Value>
-                                          <OutArgument x:TypeArguments="x:String">[pop_2010]</OutArgument>
+                                          <OutArgument x:TypeArguments="x:String">[var_str_pop_2010]</OutArgument>
                                         </ui:GetValue.Value>
                                       </ui:GetValue>
-                                      <Assign sap:VirtualizedContainerService.HintSize="960,60" sap2010:WorkflowViewState.IdRef="Assign_4">
+                                      <Assign DisplayName="limpando pop_2010" sap:VirtualizedContainerService.HintSize="960,60" sap2010:WorkflowViewState.IdRef="Assign_4">
                                         <Assign.To>
-                                          <OutArgument x:TypeArguments="x:String">[pop_2010]</OutArgument>
+                                          <OutArgument x:TypeArguments="x:String">[var_str_pop_2010]</OutArgument>
                                         </Assign.To>
                                         <Assign.Value>
-                                          <InArgument x:TypeArguments="x:String">[pop_2010.Trim]</InArgument>
+                                          <InArgument x:TypeArguments="x:String">[var_str_pop_2010.Trim]</InArgument>
                                         </Assign.Value>
                                       </Assign>
-                                      <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get Text 'DIV'" sap:VirtualizedContainerService.HintSize="960,106" sap2010:WorkflowViewState.IdRef="GetValue_3">
+                                      <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Densidade demográfica [2010]" sap:VirtualizedContainerService.HintSize="960,106" sap2010:WorkflowViewState.IdRef="GetValue_3">
                                         <ui:GetValue.Target>
                                           <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="90504d30-5b57-491d-abd3-880e7d6f7df8" InformativeScreenshot="70e8b4fa875abe675cf5d275d406a5fc" Selector="&lt;webctrl css-selector='body&amp;gt;app&amp;gt;shell&amp;gt;div&amp;gt;div&amp;gt;panorama-shell&amp;gt;div&amp;gt;section&amp;gt;panorama-resumo&amp;gt;div&amp;gt;table&amp;gt;tr&amp;gt;td&amp;gt;valor-indicador&amp;gt;div' parentid='dados' tableRow='6' tag='DIV' /&gt;">
                                             <ui:Target.TimeoutMS>
@@ -349,18 +365,18 @@
                                           </ui:Target>
                                         </ui:GetValue.Target>
                                         <ui:GetValue.Value>
-                                          <OutArgument x:TypeArguments="x:String">[ds_demografica]</OutArgument>
+                                          <OutArgument x:TypeArguments="x:String">[var_str_ds_demografica]</OutArgument>
                                         </ui:GetValue.Value>
                                       </ui:GetValue>
-                                      <Assign sap:VirtualizedContainerService.HintSize="960,60" sap2010:WorkflowViewState.IdRef="Assign_5">
+                                      <Assign DisplayName="limpando ds_demografica" sap:VirtualizedContainerService.HintSize="960,60" sap2010:WorkflowViewState.IdRef="Assign_5">
                                         <Assign.To>
-                                          <OutArgument x:TypeArguments="x:String">[ds_demografica]</OutArgument>
+                                          <OutArgument x:TypeArguments="x:String">[var_str_ds_demografica]</OutArgument>
                                         </Assign.To>
                                         <Assign.Value>
-                                          <InArgument x:TypeArguments="x:String">[ds_demografica.Trim]</InArgument>
+                                          <InArgument x:TypeArguments="x:String">[var_str_ds_demografica.Trim]</InArgument>
                                         </Assign.Value>
                                       </Assign>
-                                      <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get Text 'P'" sap:VirtualizedContainerService.HintSize="960,106" sap2010:WorkflowViewState.IdRef="GetValue_4">
+                                      <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Densidade demográfica [2010]" sap:VirtualizedContainerService.HintSize="960,106" sap2010:WorkflowViewState.IdRef="GetValue_4">
                                         <ui:GetValue.Target>
                                           <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="884e680f-ed00-4c06-9494-0864f2b48df4" InformativeScreenshot="2a0b61b714b89ac924cd01dbfad2a94a" Selector="&lt;webctrl parentid='dados' tag='P' /&gt;">
                                             <ui:Target.TimeoutMS>
@@ -372,18 +388,18 @@
                                           </ui:Target>
                                         </ui:GetValue.Target>
                                         <ui:GetValue.Value>
-                                          <OutArgument x:TypeArguments="x:String">[cg_municipio]</OutArgument>
+                                          <OutArgument x:TypeArguments="x:String">[var_str_cg_municipio]</OutArgument>
                                         </ui:GetValue.Value>
                                       </ui:GetValue>
-                                      <Assign sap:VirtualizedContainerService.HintSize="960,60" sap2010:WorkflowViewState.IdRef="Assign_6">
+                                      <Assign DisplayName="limpando cg_municipio" sap:VirtualizedContainerService.HintSize="960,60" sap2010:WorkflowViewState.IdRef="Assign_6">
                                         <Assign.To>
-                                          <OutArgument x:TypeArguments="x:String">[cg_municipio]</OutArgument>
+                                          <OutArgument x:TypeArguments="x:String">[var_str_cg_municipio]</OutArgument>
                                         </Assign.To>
                                         <Assign.Value>
-                                          <InArgument x:TypeArguments="x:String">[cg_municipio.Trim]</InArgument>
+                                          <InArgument x:TypeArguments="x:String">[var_str_cg_municipio.Trim]</InArgument>
                                         </Assign.Value>
                                       </Assign>
-                                      <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get Text 'P'" sap:VirtualizedContainerService.HintSize="960,106" sap2010:WorkflowViewState.IdRef="GetValue_5">
+                                      <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Gentílico" sap:VirtualizedContainerService.HintSize="960,106" sap2010:WorkflowViewState.IdRef="GetValue_5">
                                         <ui:GetValue.Target>
                                           <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="29d00043-3e5d-4c3c-961b-7e2d4cbc5728" InformativeScreenshot="28bb17d19eccf51572f13d361a311311" Selector="&lt;webctrl idx='2' parentid='dados' tag='P' /&gt;">
                                             <ui:Target.TimeoutMS>
@@ -395,18 +411,18 @@
                                           </ui:Target>
                                         </ui:GetValue.Target>
                                         <ui:GetValue.Value>
-                                          <OutArgument x:TypeArguments="x:String">[gentilico]</OutArgument>
+                                          <OutArgument x:TypeArguments="x:String">[var_str_gentilico]</OutArgument>
                                         </ui:GetValue.Value>
                                       </ui:GetValue>
-                                      <Assign sap:VirtualizedContainerService.HintSize="960,60" sap2010:WorkflowViewState.IdRef="Assign_7">
+                                      <Assign DisplayName="limpando gentilico" sap:VirtualizedContainerService.HintSize="960,60" sap2010:WorkflowViewState.IdRef="Assign_7">
                                         <Assign.To>
-                                          <OutArgument x:TypeArguments="x:String">[gentilico]</OutArgument>
+                                          <OutArgument x:TypeArguments="x:String">[var_str_gentilico]</OutArgument>
                                         </Assign.To>
                                         <Assign.Value>
-                                          <InArgument x:TypeArguments="x:String">[gentilico.Trim]</InArgument>
+                                          <InArgument x:TypeArguments="x:String">[var_str_gentilico.Trim]</InArgument>
                                         </Assign.Value>
                                       </Assign>
-                                      <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get Text 'P'" sap:VirtualizedContainerService.HintSize="960,106" sap2010:WorkflowViewState.IdRef="GetValue_6">
+                                      <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Prefeito" sap:VirtualizedContainerService.HintSize="960,106" sap2010:WorkflowViewState.IdRef="GetValue_6">
                                         <ui:GetValue.Target>
                                           <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="bba42ed0-cf43-4c92-afa4-3b8b888f1374" InformativeScreenshot="05b40b3cb9bf8e76e6dbcfc518e3bdf5" Selector="&lt;webctrl idx='3' parentid='dados' tag='P' /&gt;">
                                             <ui:Target.TimeoutMS>
@@ -418,19 +434,18 @@
                                           </ui:Target>
                                         </ui:GetValue.Target>
                                         <ui:GetValue.Value>
-                                          <OutArgument x:TypeArguments="x:String">[prefeito]</OutArgument>
+                                          <OutArgument x:TypeArguments="x:String">[var_str_prefeito]</OutArgument>
                                         </ui:GetValue.Value>
                                       </ui:GetValue>
-                                      <Assign sap:VirtualizedContainerService.HintSize="960,60" sap2010:WorkflowViewState.IdRef="Assign_8">
+                                      <Assign DisplayName="limpando prefeito " sap:VirtualizedContainerService.HintSize="960,60" sap2010:WorkflowViewState.IdRef="Assign_8">
                                         <Assign.To>
-                                          <OutArgument x:TypeArguments="x:String">[prefeito]</OutArgument>
+                                          <OutArgument x:TypeArguments="x:String">[var_str_prefeito]</OutArgument>
                                         </Assign.To>
                                         <Assign.Value>
-                                          <InArgument x:TypeArguments="x:String">[prefeito.trim]</InArgument>
+                                          <InArgument x:TypeArguments="x:String">[var_str_prefeito.trim]</InArgument>
                                         </Assign.Value>
                                       </Assign>
-                                      <ui:AddDataRow DataRow="{x:Null}" ArrayRow="[{pop_2020,pop_2010,ds_demografica,cg_municipio,gentilico,prefeito,tp_codigo}]" DataTable="[Tabela]" DisplayName="Add Data Row" sap:VirtualizedContainerService.HintSize="960,22" sap2010:WorkflowViewState.IdRef="AddDataRow_1" />
-                                      <If Condition="[Codigos &lt; 15000]" sap:VirtualizedContainerService.HintSize="960,466" sap2010:WorkflowViewState.IdRef="If_1">
+                                      <If Condition="[var_int_codigos &lt; 15000]" sap:VirtualizedContainerService.HintSize="960,470" sap2010:WorkflowViewState.IdRef="If_1">
                                         <If.Then>
                                           <Sequence sap:VirtualizedContainerService.HintSize="304,152" sap2010:WorkflowViewState.IdRef="Sequence_15">
                                             <sap:WorkflowViewStateService.ViewState>
@@ -438,25 +453,25 @@
                                                 <x:Boolean x:Key="IsExpanded">True</x:Boolean>
                                               </scg:Dictionary>
                                             </sap:WorkflowViewStateService.ViewState>
-                                            <Assign sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_11">
+                                            <Assign DisplayName="se cidade for menor que 15000" sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_11">
                                               <Assign.To>
-                                                <OutArgument x:TypeArguments="x:String">[tp_codigo]</OutArgument>
+                                                <OutArgument x:TypeArguments="x:String">[var_str_tp_codigo]</OutArgument>
                                               </Assign.To>
                                               <Assign.Value>
-                                                <InArgument x:TypeArguments="x:String">codigo 1</InArgument>
+                                                <InArgument x:TypeArguments="x:String">1</InArgument>
                                               </Assign.Value>
                                             </Assign>
                                           </Sequence>
                                         </If.Then>
                                         <If.Else>
-                                          <If Condition="[Codigos &lt; 30000]" sap:VirtualizedContainerService.HintSize="611,309" sap2010:WorkflowViewState.IdRef="If_2">
+                                          <If Condition="[var_int_codigos &lt; 30000]" sap:VirtualizedContainerService.HintSize="611,311" sap2010:WorkflowViewState.IdRef="If_2">
                                             <If.Then>
-                                              <Assign sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_12">
+                                              <Assign DisplayName="se cidades for 15001 ate 30 mil " sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_12">
                                                 <Assign.To>
-                                                  <OutArgument x:TypeArguments="x:String">[tp_codigo]</OutArgument>
+                                                  <OutArgument x:TypeArguments="x:String">[var_str_tp_codigo]</OutArgument>
                                                 </Assign.To>
                                                 <Assign.Value>
-                                                  <InArgument x:TypeArguments="x:String">codigo 2</InArgument>
+                                                  <InArgument x:TypeArguments="x:String">2</InArgument>
                                                 </Assign.Value>
                                               </Assign>
                                             </If.Then>
@@ -467,12 +482,12 @@
                                                     <x:Boolean x:Key="IsExpanded">True</x:Boolean>
                                                   </scg:Dictionary>
                                                 </sap:WorkflowViewStateService.ViewState>
-                                                <Assign sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_13">
+                                                <Assign DisplayName="se cidade for maior que 300001" sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_13">
                                                   <Assign.To>
-                                                    <OutArgument x:TypeArguments="x:String">[tp_codigo]</OutArgument>
+                                                    <OutArgument x:TypeArguments="x:String">[var_str_tp_codigo]</OutArgument>
                                                   </Assign.To>
                                                   <Assign.Value>
-                                                    <InArgument x:TypeArguments="x:String">codigo 3</InArgument>
+                                                    <InArgument x:TypeArguments="x:String">3</InArgument>
                                                   </Assign.Value>
                                                 </Assign>
                                               </Sequence>
@@ -480,10 +495,11 @@
                                           </If>
                                         </If.Else>
                                       </If>
+                                      <ui:AddDataRow DataRow="{x:Null}" ArrayRow="[{var_str_pop_2020,var_str_pop_2010,var_str_ds_demografica,var_str_cg_municipio,var_str_gentilico,var_str_prefeito,var_str_tp_codigo,var_str_cep}]" DataTable="[Tabela]" DisplayName="inserindo Tabela" sap:VirtualizedContainerService.HintSize="960,22" sap2010:WorkflowViewState.IdRef="AddDataRow_1" />
                                     </Sequence>
                                   </TryCatch.Try>
                                   <TryCatch.Catches>
-                                    <Catch x:TypeArguments="s:Exception" sap:VirtualizedContainerService.HintSize="1006,21" sap2010:WorkflowViewState.IdRef="Catch`1_2">
+                                    <Catch x:TypeArguments="s:Exception" sap:VirtualizedContainerService.HintSize="1006,22" sap2010:WorkflowViewState.IdRef="Catch`1_2">
                                       <sap:WorkflowViewStateService.ViewState>
                                         <scg:Dictionary x:TypeArguments="x:String, x:Object">
                                           <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -508,7 +524,37 @@
                             </scg:Dictionary>
                           </sap:WorkflowViewStateService.ViewState>
                         </ui:ForEachRow>
-                        <ui:WriteRange AddHeaders="True" DataTable="[Tabela]" DisplayName="Write Range" sap:VirtualizedContainerService.HintSize="1116,115" sap2010:WorkflowViewState.IdRef="WriteRange_9" SheetName="Sheet1" StartingCell="A1" WorkbookPath="cidadesss.xlsx" />
+                        <ui:WriteRange AddHeaders="True" DataTable="[Tabela]" DisplayName="salvando planilha cidades" sap:VirtualizedContainerService.HintSize="1116,115" sap2010:WorkflowViewState.IdRef="WriteRange_9" SheetName="Sheet1" StartingCell="A1" WorkbookPath="cidadesss.xlsx" />
+                        <ui:DatabaseConnect DatabaseConnection="[Conexao]" DisplayName="Connect" sap:VirtualizedContainerService.HintSize="1116,59" sap2010:WorkflowViewState.IdRef="DatabaseConnect_1" ProviderName="System.Data.SqlClient" ConnectionString="Data Source=servert2c.eastus.cloudapp.azure.com;Initial Catalog=Landing;Persist Security Info=True;User ID=usrlanding;Password=landing2020" />
+                        <ui:ReadRange Range="{x:Null}" AddHeaders="True" DataTable="[Tb_saida]" DisplayName="lendo planilha cidades" sap:VirtualizedContainerService.HintSize="1116,87" sap2010:WorkflowViewState.IdRef="ReadRange_3" SheetName="Sheet1" WorkbookPath="cidadesss.xlsx" />
+                        <ui:ForEachRow ColumnNames="{x:Null}" CurrentIndex="{x:Null}" DataTable="[Tb_saida]" DisplayName="For Each Row in Data Table" sap:VirtualizedContainerService.HintSize="1116,272" sap2010:WorkflowViewState.IdRef="ForEachRow_2">
+                          <ui:ForEachRow.Body>
+                            <ActivityAction x:TypeArguments="sd:DataRow">
+                              <ActivityAction.Argument>
+                                <DelegateInArgument x:TypeArguments="sd:DataRow" Name="CurrentRow" />
+                              </ActivityAction.Argument>
+                              <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="304,152" sap2010:WorkflowViewState.IdRef="Sequence_17">
+                                <Sequence.Variables>
+                                  <Variable x:TypeArguments="x:String" Name="SQL_T2C" />
+                                </Sequence.Variables>
+                                <sap:WorkflowViewStateService.ViewState>
+                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                  </scg:Dictionary>
+                                </sap:WorkflowViewStateService.ViewState>
+                                <Assign sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_14">
+                                  <Assign.To>
+                                    <OutArgument x:TypeArguments="x:String">[SQL_T2C]</OutArgument>
+                                  </Assign.To>
+                                  <Assign.Value>
+                                    <InArgument x:TypeArguments="x:String" xml:space="preserve">["Insert Into Cidades (Dev,Cidade, CEP,Codigo, Gentilico, Prefeito, Classificacao) Values ('Lucas' , '"&amp; var_str_cidade_ibge &amp;"',  '"&amp; var_str_cep &amp;"',  '"&amp; var_str_cg_municipio &amp;"',  '"&amp; var_str_gentilico &amp;",  '"&amp; var_str_prefeito &amp;"'', '"&amp; var_int_codigos &amp;"')"]</InArgument>
+                                  </Assign.Value>
+                                </Assign>
+                              </Sequence>
+                            </ActivityAction>
+                          </ui:ForEachRow.Body>
+                        </ui:ForEachRow>
+                        <ui:DatabaseDisconnect DatabaseConnection="[Conexao]" DisplayName="Disconnect" sap:VirtualizedContainerService.HintSize="1116,22" sap2010:WorkflowViewState.IdRef="DatabaseDisconnect_1" />
                       </Sequence>
                     </ActivityAction>
                   </ui:OpenBrowser.Body>
